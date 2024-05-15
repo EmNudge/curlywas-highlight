@@ -1,0 +1,222 @@
+{
+  "scopeName": "source.cwa",
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "CurlyWas",
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#function-header"
+    },
+    {
+      "include": "#numeric-instruction"
+    },
+    {
+      "include": "#import"
+    },
+    {
+      "include": "#keyword"
+    },
+    {
+      "include": "#memory-location"
+    },
+    {
+      "include": "#number"
+    },
+    {
+      "include": "#string"
+    },
+    {
+      "include": "#variable"
+    },
+    {
+      "include": "#operator"
+    },
+    {
+      "name": "keyword.operator",
+      "match": "\\b(?:<<|as|^|>>|<|>|!|\\*|\\+|-|%|/|&)\\b"
+    }
+   
+  ],
+  "repository": {
+		"type": {
+			"patterns": [ {
+				"name": "support.type",
+				"match": "\\b(i32|f32|i64|f64)\\b"
+			}]
+		},
+    "import": {
+      "begin": "(import)\\s+(\"[^\"]+\")",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.import"
+        },
+        "2": {
+          "name": "string.quoted.double"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+					"include": "#function-header"
+        },
+        {
+          "match": "memory\\((\\d+)\\)",
+          "name": "keyword.control",
+          "captures": {
+            "1": {
+              "name": "constant.numeric"
+            }
+          }
+        }
+      ]
+    },
+    "memory-location": {
+      "patterns": [
+        {
+          "match": "(\\w+)(\\?)(\\w+)",
+					"name": "memory.offset.curlywas",
+          "captures": {
+            "1": {
+              "name": "constant.numeric"
+            },
+            "2": {
+              "name": "keyword.control"
+            },
+            "3": {
+              "name": "constant.numeric"
+            }
+          }
+        }
+      ]
+    },
+    "keyword": {
+      "patterns": [
+        {
+          "name": "keyword.control.import",
+          "match": "import|include"
+        },
+        {
+          "name": "keyword.control.export",
+          "match": "export"
+        },
+        {
+          "name": "keyword.control.start",
+          "match": "start"
+        },
+        {
+          "match": "\\b(if|loop|data)\\s+(\\w+)\\b",
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "name": "entity.name.variable"
+            }
+          }
+        },
+        {
+          "match": "\\bas\\b",
+          "name": "keyword.control"
+        },
+        {
+          "name": "keyword.control",
+          "match": "\\b(if|else|loop|branch_if|data|return|select)\\b"
+        }
+      ]
+    },
+    "variable": {
+      "patterns": [
+        {
+          "name": "storage.type",
+          "match": "\\b(let|const)\\s+(?:(lazy|inline)\\s+)?(\\w+)",
+          "captures": {
+            "1": {
+              "name": "storage.type"
+            },
+            "2": {
+              "name": "keyword.other.unit"
+            },
+            "3": {
+              "name": "entity.name.variable"
+            }
+          }
+        },
+        {
+          "name": "keyword.declaration",
+          "match": "\\bglobal\\s+mut\\b"
+        }
+      ]
+    },
+    "operator": {
+      "patterns": [
+        {
+          "name": "keyword.operator",
+          "match": "[+*-/=%?^!]"
+        },
+        {
+          "name": "keyword.operator",
+          "match": "<\\||as|:=|(?:#?(?:>>|<<))"
+        }
+      ]
+    },
+    "comment": {
+      "name": "comment.line.double-slash",
+      "begin": "//",
+      "end": "$"
+    },
+    "string": {
+      "patterns": [
+        {
+          "name": "string.quoted.double",
+          "match": "\"[^\"]+\""
+        },
+        {
+          "name": "string.quoted.single",
+          "match": "'[^']+'"
+        }
+      ]
+    },
+    "number": {
+      "patterns": [
+        {
+          "match": "\\b0x[A-Za-z0-9]+\\b",
+          "name": "constant.numeric.hex"
+        },
+        {
+          "match": "\\b(?:-)?[0-9]+(\\.[0-9]+)?\\b",
+          "name": "constant.numeric"
+        }
+      ]
+    },
+    "function-header": {
+      "patterns": [
+        {
+          "explanation": "function declaration",
+          "match": "\\b(fn)\\s+(\\w+)(->\\s+\\w+)?",
+          "captures": {
+            "1": {
+              "name": "storage.type"
+            },
+            "2": {
+              "name": "entity.name.function"
+            },
+						"3": {
+							"name": "entity.name.type"
+						}
+          }
+        },
+				{ "include": "#type" }
+      ]
+    },
+    "numeric-instruction": {
+      "patterns": [
+        {
+          "name": "support.function",
+          "match": "i32.load8_u|i32.store8|i32.load16_u"
+        }
+      ]
+    }
+  }
+}
