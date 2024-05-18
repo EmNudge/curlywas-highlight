@@ -2,7 +2,9 @@
   "name": "curlywas-highlight",
   "displayName": "curlywas-highlight",
   "description": "Highlight curlywas files",
+  "publisher": "EmNudge",
   "version": "0.0.1",
+  "repository": "https://github.com/EmNudge/curlywas-highlight",
   "engines": {
     "vscode": "^1.89.0"
   },
